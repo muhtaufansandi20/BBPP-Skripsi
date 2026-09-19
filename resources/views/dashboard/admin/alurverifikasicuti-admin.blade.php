@@ -69,6 +69,9 @@
                                         </thead>
                                         <tbody class="bg-white divide-y divide-gray-200">
                                             @foreach ($cutiUmums as $index => $cuti)
+                                                @php
+                                                    $isWidyaiswara = strtolower(optional($cuti->user)->role ?? '') === 'widyaiswara';
+                                                @endphp
                                                 <tr class="hover:bg-gray-50">
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                         {{ $index + 1 }}</td>
@@ -135,7 +138,7 @@
 
                                                     {{-- Status Katimker --}}
                                                     <td class="px-6 py-4 whitespace-nowrap text-center">
-                                                        @if ($cuti->is_kabag || optional($cuti->user)->role == 'kepalatimkerja')
+                                                        @if (!$isWidyaiswara && ($cuti->is_kabag || optional($cuti->user)->role == 'kepalatimkerja'))
                                                             <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Dilewati</span>
                                                         @elseif ($cuti->cuStatusUserAdmin && $cuti->cuStatusUserAdmin->cuStatusAdminKatimker)
                                                             @if ($cuti->cuStatusUserAdmin->cuStatusAdminKatimker->status === 'disetujui')
@@ -154,7 +157,7 @@
 
                                                     {{-- Status Kabag Umum --}}
                                                     <td class="px-6 py-4 whitespace-nowrap text-center">
-                                                        @if ($cuti->is_kabag)
+                                                        @if (!$isWidyaiswara && $cuti->is_kabag)
                                                             <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Dilewati</span>
                                                         @elseif ($cuti->cuStatusUserAdmin && $cuti->cuStatusUserAdmin->cuStatusAdminKatimker && $cuti->cuStatusUserAdmin->cuStatusAdminKatimker->cuStatusKatimkerKabag)
                                                             @if ($cuti->cuStatusUserAdmin->cuStatusAdminKatimker->cuStatusKatimkerKabag->status === 'disetujui')
@@ -173,7 +176,7 @@
 
                                                     {{-- Status Kepala Balai --}}
                                                     <td class="px-6 py-4 whitespace-nowrap text-center">
-                                                        @if ($cuti->is_kabag && $cuti->cuStatusUserAdmin && $cuti->cuStatusUserAdmin->cuStatusAdminKabal)
+                                                        @if (!$isWidyaiswara && $cuti->is_kabag && $cuti->cuStatusUserAdmin && $cuti->cuStatusUserAdmin->cuStatusAdminKabal)
                                                             @if ($cuti->cuStatusUserAdmin->cuStatusAdminKabal->status === 'disetujui')
                                                                 <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Disetujui</span>
                                                             @elseif ($cuti->cuStatusUserAdmin->cuStatusAdminKabal->status === 'ditolak')
@@ -239,6 +242,9 @@
                                         </thead>
                                         <tbody class="bg-white divide-y divide-gray-200">
                                             @foreach ($cutiTahunans as $index => $cuti)
+                                                @php
+                                                    $isWidyaiswara = strtolower(optional($cuti->user)->role ?? '') === 'widyaiswara';
+                                                @endphp
                                                 <tr class="hover:bg-gray-50">
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                         {{ $index + 1 }}</td>
@@ -303,7 +309,7 @@
 
                                                     {{-- Status Katimker --}}
                                                     <td class="px-6 py-4 whitespace-nowrap text-center">
-                                                        @if ($cuti->is_kabag || optional($cuti->user)->role == 'kepalatimkerja')
+                                                        @if (!$isWidyaiswara && ($cuti->is_kabag || optional($cuti->user)->role == 'kepalatimkerja'))
                                                             <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Dilewati</span>
                                                         @elseif ($cuti->ctStatusUserAdmin && $cuti->ctStatusUserAdmin->ctStatusAdminKatimker)
                                                             @if ($cuti->ctStatusUserAdmin->ctStatusAdminKatimker->status === 'disetujui')
@@ -322,7 +328,7 @@
 
                                                     {{-- Status Kabag Umum --}}
                                                     <td class="px-6 py-4 whitespace-nowrap text-center">
-                                                        @if ($cuti->is_kabag)
+                                                        @if (!$isWidyaiswara && $cuti->is_kabag)
                                                             <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Dilewati</span>
                                                         @elseif ($cuti->ctStatusUserAdmin && $cuti->ctStatusUserAdmin->ctStatusAdminKatimker && $cuti->ctStatusUserAdmin->ctStatusAdminKatimker->ctStatusKatimkerKabag)
                                                             @if ($cuti->ctStatusUserAdmin->ctStatusAdminKatimker->ctStatusKatimkerKabag->status === 'disetujui')
@@ -341,7 +347,7 @@
 
                                                     {{-- Status Kepala Balai --}}
                                                     <td class="px-6 py-4 whitespace-nowrap text-center">
-                                                        @if ($cuti->is_kabag && $cuti->ctStatusUserAdmin && $cuti->ctStatusUserAdmin->ctStatusAdminKabal)
+                                                        @if (!$isWidyaiswara && $cuti->is_kabag && $cuti->ctStatusUserAdmin && $cuti->ctStatusUserAdmin->ctStatusAdminKabal)
                                                             @if ($cuti->ctStatusUserAdmin->ctStatusAdminKabal->status === 'disetujui')
                                                                 <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Disetujui</span>
                                                             @elseif ($cuti->ctStatusUserAdmin->ctStatusAdminKabal->status === 'ditolak')

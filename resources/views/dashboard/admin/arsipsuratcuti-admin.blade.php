@@ -25,7 +25,7 @@
         <!-- Toolbar Periode & Filter -->
         <form method="GET" action="{{ route('arsipsuratcuti.index') }}" class="flex items-center gap-3 mb-6">
             <!-- Dropdown Periode Tahun -->
-            <div class="inline-flex items-center bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-xs text-gray-700 shadow-sm">
+            {{-- <div class="inline-flex items-center bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-xs text-gray-700 shadow-sm">
                 <span class="text-gray-400 uppercase tracking-wider text-[10px] mr-2 font-medium">Periode</span>
                 <select name="tahun" onchange="this.form.submit()" class="bg-transparent font-semibold text-gray-800 focus:outline-none border-none p-0 cursor-pointer pr-2 text-xs">
                     @php $selectedTahun = request('tahun', date('Y')); @endphp
@@ -33,7 +33,7 @@
                         <option value="{{ $y }}" {{ $selectedTahun == $y ? 'selected' : '' }}>{{ $y }}</option>
                     @endfor
                 </select>
-            </div>
+            </div> --}}
 
             <!-- Tombol Filter Tambahan -->
             <div class="relative">

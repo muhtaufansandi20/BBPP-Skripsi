@@ -351,11 +351,11 @@
                         <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
                     </label>
 
-                    @if (Route::has('password.request'))
+                    {{-- @if (Route::has('password.request'))
                         <a class="forgot-password-link text-sm" href="{{ route('password.request') }}">
                             {{ __('Forgot password?') }}
                         </a>
-                    @endif
+                    @endif --}}
                 </div>
 
                 <button type="submit" class="btn bg-primary text-white w-full py-3 px-6 rounded-lg font-medium flex items-center justify-center hover:scale-105 hover:bg-emerald-600">

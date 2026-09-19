@@ -9,7 +9,7 @@
         <div>
             <x-input-label for="nip" :value="__('NIP')" class="block text-sm font-medium text-gray-700" />
             <x-text-input id="nip" class="block mt-1 w-full input-field py-3 px-4 rounded-lg" 
-                          type="text" name="nip" :value="old('nip')" required autofocus autocomplete="nip" />
+            type="text" name="nip" :value="old('nip')" required autofocus autocomplete="nip" />
             <x-input-error :messages="$errors->get('nip')" class="mt-2 text-sm text-red-600" />
         </div>
 
@@ -17,9 +17,9 @@
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" class="block text-sm font-medium text-gray-700" />
             <x-text-input id="password" class="block mt-1 w-full input-field py-3 px-4 rounded-lg"
-                          type="password"
-                          name="password"
-                          required autocomplete="current-password" />
+            type="password"
+            name="password"
+            required autocomplete="current-password" />
             <x-input-error :messages="$errors->get('password')" class="mt-2 text-sm text-red-600" />
         </div>
 
@@ -31,16 +31,8 @@
             </label>
         </div>
 
-        <div class="flex items-center justify-between mt-6">
-            @if (Route::has('password.request'))
-                <a class="forgot-password-link text-sm" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
             <button type="submit" class="btn-primary py-3 px-6 rounded-lg font-medium">
                 {{ __('Log in') }} <i class="fas fa-arrow-right ml-2"></i>
             </button>
-        </div>
-    </form>
+        </form>
 </x-guest-layout>
