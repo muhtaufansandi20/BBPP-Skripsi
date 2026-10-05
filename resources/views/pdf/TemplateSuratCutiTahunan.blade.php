@@ -1,11 +1,12 @@
 @php
-use Carbon\Carbon;
-Carbon::setLocale('id');
+    use Carbon\Carbon;
+    Carbon::setLocale('id');
 @endphp
 
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,40 +15,51 @@ Carbon::setLocale('id');
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-
         @page {
-            size: 210mm 330mm; /* Ukuran kertas F4 */
-            margin: 5mm 5mm 2mm 5mm; /* Kurangi margin bawah menjadi 3mm */
+            size: 210mm 330mm;
+            /* Ukuran kertas F4 */
+            margin: 5mm 5mm 2mm 5mm;
+            /* Kurangi margin bawah menjadi 3mm */
         }
 
         body {
             font-family: Arial, sans-serif;
-            margin: 8px; /* Kurangi margin agar lebih banyak ruang */
-            font-size: 12px; /* Ukuran font lebih kecil */
+            margin: 8px;
+            /* Kurangi margin agar lebih banyak ruang */
+            font-size: 12px;
+            /* Ukuran font lebih kecil */
         }
 
-        h1, h2 {
+        h1,
+        h2 {
             text-align: center;
-            font-size: 12px; /* Ukuran heading lebih kecil */
+            font-size: 12px;
+            /* Ukuran heading lebih kecil */
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 7px 0; /* Kurangi margin tabel */
-            font-size: 12px; /* Ukuran font lebih kecil dalam tabel */
+            margin: 7px 0;
+            /* Kurangi margin tabel */
+            font-size: 12px;
+            /* Ukuran font lebih kecil dalam tabel */
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #000;
-            padding: 3px; /* Kurangi padding agar tabel lebih rapat */
+            padding: 3px;
+            /* Kurangi padding agar tabel lebih rapat */
             text-align: left;
         }
 
         th {
             background-color: #f2f2f2;
-            font-size: 10px; /* Kecilkan font heading tabel */
+            font-size: 10px;
+            /* Kecilkan font heading tabel */
         }
+
         footer {
             font-family: 'Poppins', sans-serif;
             text-align: center;
@@ -57,16 +69,16 @@ Carbon::setLocale('id');
             background-color: #f8f8f8;
             color: #555;
         }
-
     </style>
-    
 
-<script src="https://cdn.tailwindcss.com"></script>
-<!-- Flowbite JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Flowbite JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
 </head>
-<body> 
-    
+
+<body>
+
     <img src="{{ public_path('image/kopsuratcuti2.png') }}" style="width: 100%; height: auto; object-fit: cover;">
 
     <!-- Tambahan tanggal dan tujuan surat -->
@@ -74,29 +86,29 @@ Carbon::setLocale('id');
         {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
     </div>
 
-        <div style="margin-left: 340; font-size: 12px; margin-top:5px ; width: 50%;">
-            <div style="text-align: center; margin-right :100;">Kepada</div>
-            <div>Yth, Kepala Balai Besar Pelatihan Pertanian</div>
-            <div>Batangkaluku</div>
-            <div style="text-indent: 30px;">Cq. Kabag Umum BBPP Batangkaluku</div>
-            <div>Di</div>
-            <div>Gowa</div>
-        </div>        
+    <div style="margin-left: 340; font-size: 12px; margin-top:5px ; width: 50%;">
+        <div style="text-align: center; margin-right :100;">Kepada</div>
+        <div>Yth, Kepala Balai Besar Pelatihan Pertanian</div>
+        <div>Batangkaluku</div>
+        <div style="text-indent: 30px;">Cq. Kabag Umum BBPP Batangkaluku</div>
+        <div>Di</div>
+        <div>Gowa</div>
+    </div>
 
     <h1 style="text-align: center; font-size: 12px; font-weight: bold;margin-top:5px ; margin-bottom: 2px;">
         FORMULIR PERMINTAAN DAN PEMBERIAN CUTI
     </h1>
 
     <p style="text-align: center; font-size: 12px; margin-top: 2px;">
-        Nomor: <em>{{ str_pad($cuti->no_surat, 4, '0', STR_PAD_LEFT) }} /KP.580/I.18.1/ 
-        @if($verifikasi && $verifikasi->tanggal_ttd_kabalai)
-            {{ date('m/Y', strtotime($verifikasi->tanggal_ttd_kabalai)) }}
-        @else
-            {{ date('m/Y') }}
-        @endif
+        Nomor: <em>{{ str_pad($cuti->no_surat, 4, '0', STR_PAD_LEFT) }} /KP.580/I.18.1/
+            @if ($verifikasi && $verifikasi->tanggal_ttd_kabalai)
+                {{ date('m/Y', strtotime($verifikasi->tanggal_ttd_kabalai)) }}
+            @else
+                {{ date('m/Y') }}
+            @endif
         </em>
     </p>
-    
+
 
     <!-- Bagian tabel tetap sama -->
 
@@ -114,7 +126,7 @@ Carbon::setLocale('id');
             <th>Jabatan</th>
             <td>{{ strtoupper($cuti->user->jabatan) }}</td>
             <th>Masa Kerja</th>
-            <td>{{ $cuti->masa_kerja }}</td>            
+            <td>{{ $cuti->masa_kerja }}</td>
         </tr>
         <tr>
             <th>Unit Kerja</th>
@@ -153,7 +165,7 @@ Carbon::setLocale('id');
         <tr>
             <td style="padding-left: 10px; height: 5px; overflow: hidden;">{{ ucfirst($cuti->alasan) }}</td>
         </tr>
-    </table>    
+    </table>
 
     <table>
         <tr>
@@ -165,9 +177,10 @@ Carbon::setLocale('id');
             <td style="text-align: center;">Mulai tanggal</td>
             <td style="text-align: center;">{{ \Carbon\Carbon::parse($cuti->tgl_mulai)->translatedFormat('d F') }}</td>
             <td style="text-align: center;">s/d</td>
-            <td style="text-align: center;">{{ \Carbon\Carbon::parse($cuti->tgl_selesai)->translatedFormat('d F Y') }}</td>
-        </tr>        
-    </table>    
+            <td style="text-align: center;">{{ \Carbon\Carbon::parse($cuti->tgl_selesai)->translatedFormat('d F Y') }}
+            </td>
+        </tr>
+    </table>
 
     <table border="1">
         <tr>
@@ -216,7 +229,7 @@ Carbon::setLocale('id');
         <tr>
             <td width="70%" rowspan="2" style="padding-left:15px; font-size: 12px;">
                 {{ $cuti->alamat_saat_cuti ?? '-' }}<br>
-            </td>            
+            </td>
             <td width="30%"><b>Telp.</b> &nbsp; {{ $cuti->no_hp_cuti ?? '-' }}</td>
         </tr>
         <tr>
@@ -226,12 +239,12 @@ Carbon::setLocale('id');
                     {{ $cuti->user->name ?? '-' }}
                 </strong> <br>
                 NIP. {{ $cuti->user->nip ?? '-' }}
-            </td>            
+            </td>
         </tr>
     </table>
 
     <!-- PERTIMBANGAN ATASAN -->
-    @if(!$cuti->is_kabag)
+    @if (!$cuti->is_kabag)
         <table>
             <tr>
                 <th colspan="4">VII. PERTIMBANGAN ATASAN LANGSUNG**</th>
@@ -246,11 +259,13 @@ Carbon::setLocale('id');
                 <td></td>
                 <td></td>
                 <td></td>
-                <td rowspan="2" style="text-align: center; vertical-align: middle; height: 90px; position: relative;">
+                <td rowspan="2"
+                    style="text-align: center; vertical-align: middle; height: 90px; position: relative;">
                     <!-- Gambar Tanda Tangan Ka. Bagian Umum -->
                     <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 10;">
-                        @if(isset($ttdKabagPath) && $ttdKabagPath)
-                            <img src="{{ public_path('storage/'.$ttdKabagPath) }}" alt="Tanda Tangan Kabag" width="150" height="60">
+                        @if (isset($ttdKabagPath) && $ttdKabagPath)
+                            <img src="{{ storage_path('app/public/' . $ttdKabagPath) }}" alt="Tanda Tangan Kabag"
+                                width="150" height="60">
                         @endif
                     </div>
                     <!-- Teks Ka. Bagian Umum dan Nama -->
@@ -258,7 +273,7 @@ Carbon::setLocale('id');
                         <div style="margin-top: -5px;">Kepala Bagian Umum</div>
                         <br><br><br>
                         <div style="margin-top: 5px;">
-                        <strong>{{ strtoupper($kepalaUmum->name ?? 'ROSDIANA, S.Pi, M.M') }}</strong><br>
+                            <strong>{{ strtoupper($kepalaUmum->name ?? 'ROSDIANA, S.Pi, M.M') }}</strong><br>
                             NIP. {{ $kepalaUmum->nip ?? '197001141999032001' }}
                         </div>
                     </div>
@@ -269,14 +284,14 @@ Carbon::setLocale('id');
             </tr>
         </table>
     @endif
- 
+
     <!-- KEPUTUSAN PEJABAT -->
     <table>
         <tr>
             <th colspan="4">
                 {{ $cuti->is_kabag ? 'VII' : 'VIII' }}. KEPUTUSAN PEJABAT YANG BERWENANG MEMBERIKAN CUTI**
             </th>
-        </tr>        
+        </tr>
         <tr>
             <th width="23%">DISETUJUI</th>
             <th width="23%">PERUBAHAN****</th>
@@ -289,15 +304,17 @@ Carbon::setLocale('id');
             <td></td>
             <td rowspan="2" style="text-align: center; vertical-align: middle; height: 100px; position: relative;">
                 <div style="position: absolute; top: 10px; right: 10px; z-index: 10;">
-                    <div style="width: 200px; height: 110px; display: flex; justify-content: center; align-items: center;">
-                        @if(isset($ttdKabalaiPath) && $ttdKabalaiPath)
-                            <img src="{{ public_path('storage/'.$ttdKabalaiPath) }}" alt="Tanda Tangan Kabalai" width="110" height="70" style="object-fit: contain;">
+                    <div
+                        style="width: 200px; height: 110px; display: flex; justify-content: center; align-items: center;">
+                        @if (isset($ttdKabalaiPath) && $ttdKabalaiPath)
+                            <img src="{{ storage_path('app/public/' . $ttdKabalaiPath) }}" alt="Tanda Tangan Kabag"
+                                width="150" height="60">
                         @else
                             <span style="font-size: 12px; color: #777;">Area Tanda Tangan Kepala Balai</span>
                         @endif
                     </div>
                 </div>
-                
+
                 <!-- Teks Kepala Balai dan Nama -->
                 <div style="position: relative; z-index: 5; padding-top: 0;">
                     <div style="margin-top: -5px;">Kepala Balai</div>
@@ -314,9 +331,10 @@ Carbon::setLocale('id');
         </tr>
     </table>
 
-        <footer>
-            Sibaco © 2025 — Sistem Informasi Cuti Online BBPP Batangkaluku
-        </footer>
+    <footer>
+        Sibaco © 2025 — Sistem Informasi Cuti Online BBPP Batangkaluku
+    </footer>
 
 </body>
+
 </html>
