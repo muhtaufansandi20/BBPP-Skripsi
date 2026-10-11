@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Widyaiswara;
 
 use App\Models\User;
 use App\Models\MasaKerja;
+
+use App\Models\AnggotaTim;
 use Illuminate\Http\Request;
 use App\Models\KuotaCutiTahunan;
 use App\Models\StatusCutiTahunan;
