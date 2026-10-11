@@ -179,6 +179,7 @@ class WidyaiswaraPengajuanCutiTahunan extends Controller
                 $statusPembatalan = $pengajuancutitahunan->statusCutiTahunan->status;
                 $catatanPembatalan = $pengajuancutitahunan->statusCutiTahunan->catatan ?? 'Tidak ada catatan';
             }
+                    $statusKatimker = optional($pengajuancutitahunan->ctStatusUserAdmin)->ctStatusAdminKatimker->status ?? 'Belum diproses';
 
     
         // Default nilai untuk pejabat terkait
@@ -219,6 +220,7 @@ class WidyaiswaraPengajuanCutiTahunan extends Controller
             'kepalaBalaiNIP',
             'kepalaBalaiJabatan',
             'statusAdmin',
+            'statusKatimker',
             'statusKabal',
             'catatanAdmin',
             'catatanKabal',
