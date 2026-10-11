@@ -167,33 +167,54 @@ class WidyaiswaraPengajuanCutiTahunan extends Controller
     {
         $pengajuancutitahunan = PengajuanCutiTahunan::with([
             'user',
-            'ctStatusUserAdmin',
-            'ctStatusUserAdmin.ctStatusAdminKabal' // Direct relationship for Kabag to Kabal
+            'ctStatusUserAdmin.ctStatusAdminKatimker.ctStatusKatimkerKabag.ctStatusKabagKabal',
+            'statusCutiTahunan'
         ])->where('id', $id)->firstOrFail();
 
-            // Cek status pembatalan
-            $statusPembatalan = 'Belum dibatalkan';
-            $catatanPembatalan = 'Tidak ada catatan';
-            
-            if ($pengajuancutitahunan->statusCutiTahunan) {
-                $statusPembatalan = $pengajuancutitahunan->statusCutiTahunan->status;
-                $catatanPembatalan = $pengajuancutitahunan->statusCutiTahunan->catatan ?? 'Tidak ada catatan';
-            }
-                    $statusKatimker = optional($pengajuancutitahunan->ctStatusUserAdmin)->ctStatusAdminKatimker->status ?? 'Belum diproses';
-
-    
-        // Default nilai untuk pejabat terkait
+        // Default nilai pejabat jika tidak ditemukan
+        $ketuaNama = 'Tidak ditemukan';
+        $ketuaNIP = '-';
+        $ketuaJabatan = '-';
+        $kepalaBagianNama = 'Tidak ditemukan';
+        $kepalaBagianNIP = '-';
+        $kepalaBagianJabatan = '-';
         $kepalaBalaiNama = 'Tidak ditemukan';
         $kepalaBalaiNIP = '-';
         $kepalaBalaiJabatan = '-';
-    
-        // Default status dan catatan
-        $statusAdmin = 'Belum diproses';
-        $statusKabal = 'Belum diproses';
-    
-        $catatanAdmin = 'Tidak ada catatan';
-        $catatanKabal = 'Tidak ada catatan';
-    
+
+        // Cek status pembatalan
+        $statusPembatalan = 'Belum dibatalkan';
+        $catatanPembatalan = 'Tidak ada catatan';
+        
+        if ($pengajuancutitahunan->statusCutiTahunan) {
+            $statusPembatalan = $pengajuancutitahunan->statusCutiTahunan->status;
+            $catatanPembatalan = $pengajuancutitahunan->statusCutiTahunan->catatan ?? 'Tidak ada catatan';
+        }
+
+        // Mencari anggota tim yang mengajukan cuti
+        $anggotaTim = AnggotaTim::where('user_id', $pengajuancutitahunan->user_id)->first();
+
+        if ($anggotaTim) {
+            $ketuaTim = AnggotaTim::where('tim_id', $anggotaTim->tim_id)
+                ->where('role', 'Ketua')
+                ->with('user')
+                ->first();
+
+            if ($ketuaTim) {
+                $ketuaNama = $ketuaTim->user->name ?? 'Tidak ada nama';
+                $ketuaNIP = $ketuaTim->user->nip ?? '-';
+                $ketuaJabatan = $ketuaTim->user->jabatan ?? '-';
+            }
+        }
+
+        // Mencari Kepala Bagian
+        $kepalaBagian = User::where('role', 'Kepalabagian')->first();
+        if ($kepalaBagian) {
+            $kepalaBagianNama = $kepalaBagian->name;
+            $kepalaBagianNIP = $kepalaBagian->nip;
+            $kepalaBagianJabatan = $kepalaBagian->jabatan;
+        }
+
         // Mencari Kepala Balai
         $kepalaBalai = User::where('role', 'Kepalabalai')->first();
         if ($kepalaBalai) {
@@ -201,30 +222,38 @@ class WidyaiswaraPengajuanCutiTahunan extends Controller
             $kepalaBalaiNIP = $kepalaBalai->nip;
             $kepalaBalaiJabatan = $kepalaBalai->jabatan;
         }
-    
-        // Mengambil status & catatan pengajuan cuti di berbagai level persetujuan 
-        if ($pengajuancutitahunan->ctStatusUserAdmin) {
-            $statusAdmin = $pengajuancutitahunan->ctStatusUserAdmin->status ?? 'Belum diproses';
-            $catatanAdmin = $pengajuancutitahunan->ctStatusUserAdmin->catatan ?? 'Tidak ada catatan';
-            
-            // Untuk kepala bagian, langsung cek approval kabal
-            if ($pengajuancutitahunan->ctStatusUserAdmin->ctStatusAdminKabal) {
-                $statusKabal = $pengajuancutitahunan->ctStatusUserAdmin->ctStatusAdminKabal->status ?? 'Belum diproses';
-                $catatanKabal = $pengajuancutitahunan->ctStatusUserAdmin->ctStatusAdminKabal->catatan ?? 'Tidak ada catatan';
-            }
-        }
-    
+
+        // Mengambil status & catatan tiap level
+        $statusAdmin = $pengajuancutitahunan->ctStatusUserAdmin->status ?? 'Belum diproses';
+        $statusKatimker = optional($pengajuancutitahunan->ctStatusUserAdmin)->ctStatusAdminKatimker->status ?? 'Belum diproses';
+        $statusKabag = optional(optional($pengajuancutitahunan->ctStatusUserAdmin)->ctStatusAdminKatimker)->ctStatusKatimkerKabag->status ?? 'Belum diproses';
+        $statusKabal = optional(optional(optional($pengajuancutitahunan->ctStatusUserAdmin)->ctStatusAdminKatimker)->ctStatusKatimkerKabag)->ctStatusKabagKabal->status ?? 'Belum diproses';
+
+        $catatanAdmin = $pengajuancutitahunan->ctStatusUserAdmin->catatan ?? 'Tidak ada catatan';
+        $catatanKatimker = optional($pengajuancutitahunan->ctStatusUserAdmin)->ctStatusAdminKatimker->catatan ?? 'Tidak ada catatan';
+        $catatanKabag = optional(optional($pengajuancutitahunan->ctStatusUserAdmin)->ctStatusAdminKatimker)->ctStatusKatimkerKabag->catatan ?? 'Tidak ada catatan';
+        $catatanKabal = optional(optional(optional($pengajuancutitahunan->ctStatusUserAdmin)->ctStatusAdminKatimker)->ctStatusKatimkerKabag)->ctStatusKabagKabal->catatan ?? 'Tidak ada catatan';
+
         return view('dashboard.widyaiswara.detailpengajuancutitahunan-widyaiswara', compact(
-            'pengajuancutitahunan',
-            'kepalaBalaiNama',
-            'kepalaBalaiNIP',
-            'kepalaBalaiJabatan',
-            'statusAdmin',
-            'statusKatimker',
-            'statusKabal',
-            'catatanAdmin',
-            'catatanKabal',
-            'statusPembatalan',
+            'pengajuancutitahunan', 
+            'ketuaNama', 
+            'ketuaNIP', 
+            'ketuaJabatan', 
+            'kepalaBagianNama', 
+            'kepalaBagianNIP', 
+            'kepalaBagianJabatan', 
+            'kepalaBalaiNama', 
+            'kepalaBalaiNIP', 
+            'kepalaBalaiJabatan', 
+            'statusAdmin', 
+            'statusKatimker', 
+            'statusKabag', 
+            'statusKabal', 
+            'catatanAdmin', 
+            'catatanKatimker', 
+            'catatanKabag', 
+            'catatanKabal', 
+            'statusPembatalan', 
             'catatanPembatalan'
         ));
     }
