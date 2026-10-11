@@ -250,15 +250,12 @@
                 <th colspan="4">VII. PERTIMBANGAN ATASAN LANGSUNG**</th>
             </tr>
             <tr>
-                <th width="23%">DISETUJUI</th>
+                <th width="30%">DISETUJUI</th>
                 <th width="23%">PERUBAHAN****</th>
                 <th width="23%">DITANGGUHKAN****</th>
-                <th width="30%">TIDAK DISETUJUI****</th>
+                <th width="23%">TIDAK DISETUJUI****</th>
             </tr>
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td rowspan="2"
                     style="text-align: center; vertical-align: middle; height: 90px; position: relative;">
                     <!-- Gambar Tanda Tangan Ka. Bagian Umum -->
@@ -278,6 +275,9 @@
                         </div>
                     </div>
                 </td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <td colspan="3" height="10"></td>
@@ -293,16 +293,13 @@
             </th>
         </tr>
         <tr>
-            <th width="23%">DISETUJUI</th>
+            <th width="30%">DISETUJUI</th>
             <th width="23%">PERUBAHAN****</th>
             <th width="23%">DITANGGUHKAN****</th>
-            <th width="30%">TIDAK DISETUJUI****</th>
+            <th width="23%">TIDAK DISETUJUI****</th>
         </tr>
         <tr>
-            <td height="5"></td>
-            <td></td>
-            <td></td>
-            <td rowspan="2" style="text-align: center; vertical-align: middle; height: 100px; position: relative;">
+            <td rowspan="2" height="5" style="text-align: center; vertical-align: middle; height: 100px; position: relative;">
                 <div style="position: absolute; top: 10px; right: 10px; z-index: 10;">
                     <div
                         style="width: 200px; height: 110px; display: flex; justify-content: center; align-items: center;">
@@ -325,6 +322,9 @@
                     </div>
                 </div>
             </td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
         <tr>
             <td colspan="3" height="10"></td>

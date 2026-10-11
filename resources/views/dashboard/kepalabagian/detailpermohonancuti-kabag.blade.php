@@ -1,6 +1,19 @@
 @extends('dashboard.kepalabagian.base-kepalabagian')
 
 @section('content')
+
+@if(auth()->check() && strtolower(auth()->user()->role) === 'kepalabagian' && (int) ((\App\Models\CtStatusAdminKatimker::find($ctstatusadminkatimker->id)?->statusUserAdmin?->id_pengajuan_cuti_tahunan ?? 0)) > 0)
+    <div class="mx-auto mb-4 max-w-7xl px-4 sm:px-6 lg:px-8 flex justify-end">
+        <form method="POST" action="{{ route('verifikasi-cuti.batal', ['jenis' => 'tahunan', 'id' => (int) ((\App\Models\CtStatusAdminKatimker::find($ctstatusadminkatimker->id)?->statusUserAdmin?->id_pengajuan_cuti_tahunan ?? 0))]) }}"
+              onsubmit="return confirm('Batalkan persetujuan Anda? Status akan dikembalikan menjadi belum disetujui dan Anda harus memverifikasi ulang.');">
+            @csrf
+            <button type="submit" class="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 shadow-sm transition hover:bg-red-100">
+                <span aria-hidden="true">↶</span> Batal Verifikasi
+            </button>
+        </form>
+    </div>
+@endif
+
 <div class="max-w-6xl mx-auto p-6 pt-0">
 
     <!-- Header -->

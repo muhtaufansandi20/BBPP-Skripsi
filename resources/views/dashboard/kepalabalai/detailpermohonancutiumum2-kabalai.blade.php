@@ -1,6 +1,19 @@
 @extends('dashboard.kepalabalai.base-kepalabalai')
 
 @section('content')
+
+@if(auth()->check() && strtolower(auth()->user()->role) === 'kepalabalai' && (int) ((\App\Models\CuStatusUserAdmin::find($custatuskatimkerkabag->id)?->id_pengajuan_cuti_umum ?? 0)) > 0)
+    <div class="mx-auto mb-4 max-w-7xl px-4 sm:px-6 lg:px-8 flex justify-end">
+        <form method="POST" action="{{ route('verifikasi-cuti.batal', ['jenis' => 'umum', 'id' => (int) ((\App\Models\CuStatusUserAdmin::find($custatuskatimkerkabag->id)?->id_pengajuan_cuti_umum ?? 0))]) }}"
+              onsubmit="return confirm('Batalkan persetujuan Anda? Status akan dikembalikan menjadi belum disetujui dan Anda harus memverifikasi ulang.');">
+            @csrf
+            <button type="submit" class="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 shadow-sm transition hover:bg-red-100">
+                <span aria-hidden="true">↶</span> Batal Verifikasi
+            </button>
+        </form>
+    </div>
+@endif
+
 @php
     // Menentukan apakah yang mengajukan adalah Kepala Bagian (berdasarkan kesamaan NIP)
     // Logika ini digunakan untuk menyembunyikan Step 2 (Verifikasi Kabag) jika true

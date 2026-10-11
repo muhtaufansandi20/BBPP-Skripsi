@@ -8,44 +8,67 @@ use App\Models\PengajuanCutiTahunan;
 use App\Http\Controllers\Controller;
 use App\Models\CtStatusUserAdmin;
 use App\Models\KuotaCutiTahunan;
+use Illuminate\Support\Facades\DB;
 
 class AdminPengajuanCutiTahunan extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        // Mengambil permohonan yang belum diverifikasi (status 'belum disetujui' atau belum memiliki status)
-        // dan belum dibatalkan oleh user
-        $belumVerifikasi = PengajuanCutiTahunan::with(['user', 'statusAdmin', 'statusCutiTahunan'])
-            ->where(function($query) {
-                $query->whereHas('statusAdmin', function($q) {
-                    $q->where('status', 'belum disetujui')
-                        ->orWhere('status', 'perubahan');
-                })
-                ->orWhereDoesntHave('statusAdmin');
-            })
-            ->whereHas('statusCutiTahunan', function($query) {
-                $query->where('status', 'diajukan');
-            })
-            ->orderBy('tgl_pengajuan', 'desc')
-            ->get();
-        
-        // Mengambil permohonan yang sudah diverifikasi (status 'disetujui', 'ditangguhkan', atau 'ditolak')
-        // dan belum dibatalkan oleh user
-        $sudahVerifikasi = PengajuanCutiTahunan::with(['user', 'statusAdmin', 'statusCutiTahunan'])
-            ->whereHas('statusAdmin', function($query) {
-                $query->whereIn('status', ['disetujui', 'ditangguhkan', 'ditolak']);
-            })
-            ->whereHas('statusCutiTahunan', function($query) {
-                $query->where('status', 'diajukan');
-            })
-            ->orderBy('tgl_pengajuan', 'desc')
-            ->get();
+public function index()
+{
+    // Ambil ID status admin terbaru untuk setiap pengajuan cuti tahunan.
+    $latestStatusIds = DB::table('ct_status_user_admins')
+        ->selectRaw('MAX(id)')
+        ->groupBy('id_pengajuan_cuti_tahunan');
 
-        return view('dashboard.admin.pengajuancutitahunan-admin', compact('belumVerifikasi', 'sudahVerifikasi'));
-    }
+    // Pengajuan yang status admin TERBARUNYA belum diverifikasi.
+    $belumVerifikasi = PengajuanCutiTahunan::with([
+            'user',
+            'statusAdmin',
+            'statusCutiTahunan',
+        ])
+        ->where(function ($query) use ($latestStatusIds) {
+            $query->whereHas('statusAdmin', function ($q) use ($latestStatusIds) {
+                $q->whereIn('ct_status_user_admins.id', $latestStatusIds)
+                    ->whereIn('ct_status_user_admins.status', [
+                        'belum disetujui',
+                        'perubahan',
+                    ]);
+            })
+            ->orWhereDoesntHave('statusAdmin');
+        })
+        ->whereHas('statusCutiTahunan', function ($query) {
+            $query->where('status', 'diajukan');
+        })
+        ->orderByDesc('tgl_pengajuan')
+        ->get();
+
+    // Pengajuan yang status admin TERBARUNYA sudah diproses.
+    $sudahVerifikasi = PengajuanCutiTahunan::with([
+            'user',
+            'statusAdmin',
+            'statusCutiTahunan',
+        ])
+        ->whereHas('statusAdmin', function ($query) use ($latestStatusIds) {
+            $query->whereIn('ct_status_user_admins.id', $latestStatusIds)
+                ->whereIn('ct_status_user_admins.status', [
+                    'disetujui',
+                    'ditangguhkan',
+                    'ditolak',
+                ]);
+        })
+        ->whereHas('statusCutiTahunan', function ($query) {
+            $query->where('status', 'diajukan');
+        })
+        ->orderByDesc('tgl_pengajuan')
+        ->get();
+
+    return view(
+        'dashboard.admin.pengajuancutitahunan-admin',
+        compact('belumVerifikasi', 'sudahVerifikasi')
+    );
+}
     
     /** 
      * Show the form for creating a new resource.
@@ -93,7 +116,16 @@ class AdminPengajuanCutiTahunan extends Controller
             'ketuaNIP' => '-',
             'kepalaBagian' => null, // Ubah menjadi satu variabel saja
             'kepalaBalai' => null,
-            'checkverifikasi' => CtStatusUserAdmin::where('id_pengajuan_cuti_tahunan', $pengajuan->id)->first(),
+'checkverifikasi' => CtStatusUserAdmin::where(
+    'id_pengajuan_cuti_tahunan',
+    $pengajuan->id
+)
+    ->whereIn('status', [
+        'disetujui',
+        'ditangguhkan',
+        'ditolak',
+    ])
+    ->exists(),
             'kuotaCuti' => KuotaCutiTahunan::where('user_id', $user->id)->first() ?? new KuotaCutiTahunan([
                 'kuota_n' => 12,
                 'kuota_n1' => 0,

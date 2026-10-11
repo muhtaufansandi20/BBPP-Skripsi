@@ -26,6 +26,7 @@ use App\Http\Controllers\KepalaBalai\CtStatusKabagKabal;
 use App\Http\Controllers\KepalaBalai\KabalaiVerifikasiCutiUmum;
 use App\Http\Controllers\Widyaiswara\WidyaiswaraPengajuanCutiTahunan;
 use App\Http\Controllers\Widyaiswara\WidyaiswaraPengajuanCutiUmum;
+use App\Http\Controllers\PembatalanVerifikasiCutiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +87,11 @@ Route::middleware(['auth'])->group(function () {
 
     // API Kalender
     Route::get('/api/libur-internal', [AdminKalenderCuti::class, 'getLiburAPI'])->name('api.libur.internal');
+    // Pembatalan Verifikasi Cuti
+Route::post(
+    '/verifikasi-cuti/{jenis}/{id}/batal',
+    [PembatalanVerifikasiCutiController::class, 'batal']
+)->name('verifikasi-cuti.batal');
 });
 
 /*
